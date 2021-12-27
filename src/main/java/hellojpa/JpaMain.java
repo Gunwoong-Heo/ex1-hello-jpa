@@ -80,8 +80,8 @@ public class JpaMain {
 //            Member member = em.find(Member.class, 150L);
 //            member.setName("zzzz");
 
-            Member memberB = em.find(Member.class, 160L);
-            em.remove(memberB);
+//            Member memberB = em.find(Member.class, 160L);
+//            em.remove(memberB);
 
             tx.commit(); // DB에 쿼리 날리는 시점
         } catch (Exception e) {
