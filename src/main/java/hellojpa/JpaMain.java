@@ -83,6 +83,25 @@ public class JpaMain {
 //            Member memberB = em.find(Member.class, 160L);
 //            em.remove(memberB);
 
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team); // PK 값이 세팅 되고 영속상태가 됨
+
+            Member member = new Member();
+            member.setUsername("member1");
+//            member.setTeamId(team.getId());
+            member.setTeam(team);
+            em.persist(member);
+
+//            em.flush();
+//            em.clear();
+
+            Member findMember = em.find(Member.class, member.getId());
+//            Long findTeamId = findMember.getTeamId();
+//            Team findTeam = em.find(Team.class, findTeamId);
+            Team findTeam = findMember.getTeam();
+            System.out.println("findTeam = " + findTeam.getName());
+
             tx.commit(); // DB에 쿼리 날리는 시점
         } catch (Exception e) {
             tx.rollback();
@@ -94,4 +113,5 @@ public class JpaMain {
         emf.close();
 
     }
+
 }
