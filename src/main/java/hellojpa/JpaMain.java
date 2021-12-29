@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -90,18 +91,36 @@ public class JpaMain {
             Member member = new Member();
             member.setUsername("member1");
 //            member.setTeamId(team.getId());
-            member.setTeam(team);
+            member.changeTeam(team);
             em.persist(member);
+
+//            team.getMembers().add(member);  // 주인이 아닌 쪽은 읽기전용으로 set을 해줘도 JPA가 반영을 안한다.
 
 //            em.flush();
 //            em.clear();
 
+            Team findTeam = em.find(Team.class, team.getId());
+            List<Member> members = findTeam.getMembers();
+            for (Member m : members) {
+                System.out.println("m = " + m.getUsername());
+            }
+/*
+
             Member findMember = em.find(Member.class, member.getId());
+
 //            Long findTeamId = findMember.getTeamId();
 //            Team findTeam = em.find(Team.class, findTeamId);
-            Team findTeam = findMember.getTeam();
-            System.out.println("findTeam = " + findTeam.getName());
 
+//            Team findTeam = findMember.getTeam();
+//            System.out.println("findTeam = " + findTeam.getName());
+
+            List<Member> members = findMember.getTeam().getMembers();
+
+            for (Member m : members) {
+                System.out.println("m.getUsername() = " + m.getUsername());
+            }
+
+*/
             tx.commit(); // DB에 쿼리 날리는 시점
         } catch (Exception e) {
             tx.rollback();
