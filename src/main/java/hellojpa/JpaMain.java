@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -84,26 +85,26 @@ public class JpaMain {
 //            Member memberB = em.find(Member.class, 160L);
 //            em.remove(memberB);
 
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team); // PK 값이 세팅 되고 영속상태가 됨
-
-            Member member = new Member();
-            member.setUsername("member1");
-//            member.setTeamId(team.getId());
-            member.changeTeam(team);
-            em.persist(member);
+//            Team team = new Team();
+//            team.setName("TeamA");
+//            em.persist(team); // PK 값이 세팅 되고 영속상태가 됨
+//
+//            Member member = new Member();
+//            member.setUsername("member1");
+////            member.setTeamId(team.getId());
+//            member.changeTeam(team);
+//            em.persist(member);
 
 //            team.getMembers().add(member);  // 주인이 아닌 쪽은 읽기전용으로 set을 해줘도 JPA가 반영을 안한다.
 
 //            em.flush();
 //            em.clear();
 
-            Team findTeam = em.find(Team.class, team.getId());
-            List<Member> members = findTeam.getMembers();
-            for (Member m : members) {
-                System.out.println("m = " + m.getUsername());
-            }
+//            Team findTeam = em.find(Team.class, team.getId());
+//            List<Member> members = findTeam.getMembers();
+//            for (Member m : members) {
+//                System.out.println("m = " + m.getUsername());
+//            }
 /*
 
             Member findMember = em.find(Member.class, member.getId());
@@ -121,6 +122,30 @@ public class JpaMain {
             }
 
 */
+
+//            Movie movie = new Movie();
+//            movie.setDirector("aaaa");
+//            movie.setActor("bbbb");
+//            movie.setName("고질라");
+//            movie.setPrice(10000);
+//
+//            em.persist(movie);
+//
+//            em.flush();
+//            em.clear();
+//
+//            em.find(Movie.class, movie.getId());
+
+            Member member = new Member();
+            member.setCreatedBy("kim");
+            member.setUsername("user");
+            member.setCreatedDate(LocalDateTime.now());
+
+            em.persist(member);
+
+            em.flush();
+            em.clear();
+
             tx.commit(); // DB에 쿼리 날리는 시점
         } catch (Exception e) {
             tx.rollback();

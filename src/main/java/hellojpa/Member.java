@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 //@Table(name = "USER")   // DB 테이블 명이 다를 경우
-public class Member {
+public class Member extends BaseEntity {
 
     @Id @GeneratedValue
     private Long id;
