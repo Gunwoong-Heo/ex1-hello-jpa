@@ -1,10 +1,8 @@
 package hellojpa;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import java.time.LocalDateTime;
+import org.hibernate.Hibernate;
+
+import javax.persistence.*;
 import java.util.List;
 
 public class JpaMain {
@@ -136,19 +134,165 @@ public class JpaMain {
 //
 //            em.find(Movie.class, movie.getId());
 
-            Member member = new Member();
-            member.setCreatedBy("kim");
-            member.setUsername("user");
-            member.setCreatedDate(LocalDateTime.now());
+//            Member member = new Member();
+//            member.setCreatedBy("kim");
+//            member.setUsername("user");
+//            member.setCreatedDate(LocalDateTime.now());
+//
+//            em.persist(member);
+//
+//            em.flush();
+//            em.clear();
 
+//            Member member = em.find(Member.class, 1L);
+//            printMember(member);
+//            printMemberAndTeam(member);
+
+/*
+            Member member = new Member();
+            member.setUsername("hello");
             em.persist(member);
+            em.flush();
+            em.clear();
+            //
+//            Member findMember = em.find(Member.class, member.getId());
+            Member findMember = em.getReference(Member.class, member.getId());
+            System.out.println("findMember = " + findMember.getClass());
+            System.out.println("findMember.getId() = " + findMember.getId()); // 이 시점에는 select 쿼리가 나가지 않는다. id의 경우는 getReference() 의 파라미터로 값으로 이미 넘겨줬음
+            System.out.println("findMember.getUsername() = " + findMember.getUsername());
+            System.out.println("findMember.getUsername() = " + findMember.getUsername());
+*/
+
+/*
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            em.persist(member1);
+
+            Member member2 = new Member();
+            member2.setUsername("member2");
+            em.persist(member2);
 
             em.flush();
             em.clear();
 
+            Member m1 = em.find(Member.class, member1.getId());
+            Member m2 = em.getReference(Member.class, member2.getId());
+
+            System.out.println("m1 == m2 : " + (m1.getClass() == m2.getClass()));  // 출력결과 : m1 == m2 : false
+            System.out.println("m1 == m2 : " + (m1 instanceof Member));  // 출력결과 : m1 == m2 : true
+            System.out.println("m1 == m2 : " + (m2 instanceof Member));  // 출력결과 : m1 == m2 : true
+*/
+
+/*
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            em.persist(member1);
+
+            em.flush();
+            em.clear();
+
+            Member m1 = em.find(Member.class, member1.getId());
+            System.out.println("m1 = " + m1.getClass());  // 출력결과 -> m1 = class hellojpa.Member
+
+            Member reference = em.getReference(Member.class, member1.getId());
+            System.out.println("reference = " + reference.getClass());  // 출력결과 -> reference = class hellojpa.Member
+            System.out.println("a == a : " + (m1 == reference));  // 출력결과 -> a == a : true
+*/
+
+/*
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            em.persist(member1);
+
+            em.flush();
+            em.clear();
+
+            Member refMember = em.getReference(Member.class, member1.getId());
+            System.out.println("refMember = " + refMember.getClass());  // 출력결과 -> refMember = class hellojpa.Member$HibernateProxy$DkhP7QqA
+
+            Member findMember = em.find(Member.class, member1.getId());
+            System.out.println("findMember = " + findMember.getClass());  // 출력결과 -> findMember = class hellojpa.Member$HibernateProxy$DkhP7QqA
+            System.out.println("refMember == findMember : " + (refMember == findMember));  // 출력결과 -> refMember == findMember : true
+            // 결과가 true 이고 refMember 와 findMember 가 같은 proxy로 반환되는 이유는
+            // JPA에서는 같은 영속성 컨텍스트(같은 트랜잭션) 안에서 같은 객체의 `==` 비교시 true를 보장해야한다.
+*/
+
+/*
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            em.persist(member1);
+
+            em.flush();
+            em.clear();
+
+            Member refMember = em.getReference(Member.class, member1.getId());
+            System.out.println("refMember = " + refMember.getClass()); // proxy
+
+            em.detach(refMember);  // 혹은 em.close();  혹은 em.clear();
+
+            refMember.getUsername();  // 에러 발생
+*/
+
+/*
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            em.persist(member1);
+
+            em.flush();
+            em.clear();
+
+            Member refMember = em.getReference(Member.class, member1.getId());
+            System.out.println("refMember = " + refMember.getClass());  // 출력결과 -> refMember = class hellojpa.Member$HibernateProxy$ixJ7bSYG
+
+            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(refMember));  // 출력결과 -> isLoaded = false
+            Hibernate.initialize(refMember);  // 강제초기화
+            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(refMember));  // 출력결과 -> isLoaded = true
+*/
+
+/*
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
+
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            member1.setTeam(team);
+
+            em.persist(member1);
+
+            em.flush();
+            em.clear();
+
+            Member m = em.find(Member.class, member1.getId());
+
+            System.out.println("m.getTeam().getClass() = " + m.getTeam().getClass());
+            m.getTeam().getName();  // lazyLoading시 초기화 실행시점 (`Team`에 대한 select 쿼리가 실행되는 시점)
+
+            System.out.println("teamName = " + m.getTeam().getName());
+*/
+
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
+
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            member1.setTeam(team);
+
+            em.persist(member1);
+
+            em.flush();
+            em.clear();
+
+//            Member m = em.find(Member.class, member1.getId());
+
+            List<Member> result = em.createQuery("select m from Member m join fetch m.team", Member.class)
+                    .getResultList();
+
             tx.commit(); // DB에 쿼리 날리는 시점
         } catch (Exception e) {
             tx.rollback();
+            e.printStackTrace();
         } finally {
            em.close();  // 내부적으로 database connection을 물고 있기 때문에 끝나면 꼭 닫아줘야한다.
         }
@@ -156,6 +300,18 @@ public class JpaMain {
         // WAS 가 내려갈때 EntityManagerFactory를 닫아줘야한다.(그래야 connection pooling 등이 내부적으로 release가 된다.)
         emf.close();
 
+    }
+
+    private static void printMember(Member member) {
+        System.out.println("member = " + member);
+    }
+
+    private static void printMemberAndTeam(Member member) {
+        String username = member.getUsername();
+        System.out.println("username = " + username);
+
+        Team team = member.getTeam();
+        System.out.println("team = " + team);
     }
 
 }
