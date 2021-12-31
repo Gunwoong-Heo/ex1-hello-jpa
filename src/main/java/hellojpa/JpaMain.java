@@ -271,6 +271,7 @@ public class JpaMain {
             System.out.println("teamName = " + m.getTeam().getName());
 */
 
+/*
             Team team = new Team();
             team.setName("teamA");
             em.persist(team);
@@ -288,6 +289,25 @@ public class JpaMain {
 
             List<Member> result = em.createQuery("select m from Member m join fetch m.team", Member.class)
                     .getResultList();
+*/
+
+            Child child1 = new Child();
+            Child child2 = new Child();
+
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
+
+            em.persist(parent);
+//            em.persist(child1);
+//            em.persist(child2);
+
+            em.flush();
+            em.clear();
+
+            Parent findParent = em.find(Parent.class, parent.getId());
+            findParent.getChildList().remove(0);  // 컬렉션에서 제거를 하면 DB에도 delete 쿼리가 나간다.
+//            em.remove(findParent);
 
             tx.commit(); // DB에 쿼리 날리는 시점
         } catch (Exception e) {
