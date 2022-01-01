@@ -291,6 +291,7 @@ public class JpaMain {
                     .getResultList();
 */
 
+/*
             Child child1 = new Child();
             Child child2 = new Child();
 
@@ -308,6 +309,31 @@ public class JpaMain {
             Parent findParent = em.find(Parent.class, parent.getId());
             findParent.getChildList().remove(0);  // 컬렉션에서 제거를 하면 DB에도 delete 쿼리가 나간다.
 //            em.remove(findParent);
+*/
+
+//            Member member = new Member();
+//            member.setUsername("hello");
+//            member.setHomeAddress(new Address("city", "street", "100"));
+//            member.setWorkPeriod(new Period());
+//
+//            em.persist(member);
+
+            Address address = new Address("city", "street", "100");
+
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setHomeAddress(address);
+            em.persist(member);
+
+//            Address copyAddress = new Address(address.getCity(), address.getStreet(), address.getZipcode());
+            Address newAddress = new Address("changedCity", address.getStreet(), address.getZipcode());
+
+            Member member2 = new Member();
+            member2.setUsername("member2");
+            member2.setHomeAddress(newAddress);
+            em.persist(member2);
+
+//            member.getHomeAddress().setCity("newCity");
 
             tx.commit(); // DB에 쿼리 날리는 시점
         } catch (Exception e) {
@@ -326,12 +352,12 @@ public class JpaMain {
         System.out.println("member = " + member);
     }
 
-    private static void printMemberAndTeam(Member member) {
-        String username = member.getUsername();
-        System.out.println("username = " + username);
-
-        Team team = member.getTeam();
-        System.out.println("team = " + team);
-    }
+//    private static void printMemberAndTeam(Member member) {
+//        String username = member.getUsername();
+//        System.out.println("username = " + username);
+//
+//        Team team = member.getTeam();
+//        System.out.println("team = " + team);
+//    }
 
 }
