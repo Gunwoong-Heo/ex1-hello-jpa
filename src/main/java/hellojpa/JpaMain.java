@@ -3,6 +3,9 @@ package hellojpa;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Set;
 
@@ -338,13 +341,14 @@ public class JpaMain {
 //            member.getHomeAddress().setCity("newCity");
  */
 
+/*
             Member member = new Member();
             member.setUsername("member1");
-            /*member.setHomeAddress(new Address("homeCity", "street", "10000"));
+            member.setHomeAddress(new Address("homeCity", "street", "10000"));
 
             member.getFavoriteFoods().add("치킨");
             member.getFavoriteFoods().add("족발");
-            member.getFavoriteFoods().add("피자");*/
+            member.getFavoriteFoods().add("피자");
 
 //            member.getAddressHistory().add(new Address("old1", "street", "10000"));
 //            member.getAddressHistory().add(new Address("old2", "street", "10000"));
@@ -356,7 +360,7 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            /*System.out.println("===================   START   ===================");
+            System.out.println("===================   START   ===================");
             Member findMember = em.find(Member.class, member.getId());
 
             // homeCity -> newCity
@@ -367,11 +371,31 @@ public class JpaMain {
 
             // 치킨 -> 한식
             findMember.getFavoriteFoods().remove("치킨");
-            findMember.getFavoriteFoods().add("한식");*/
+            findMember.getFavoriteFoods().add("한식");
 
             // remove할 대상을 찾을때 equals로 찾는다. 그래서 equals와 hashcode가 제대로 구현이 되어 있지 않으면 망한다..
 //            findMember.getAddressHistory().remove(new Address("old1", "street", "10000"));
 //            findMember.getAddressHistory().add(new Address("newCity1", "street", "10000"));
+*/
+
+//            List<Member> resultList = em.createQuery(
+//                    "select m from Member m where m.username like '%kim%'",
+//                    Member.class
+//            ).getResultList();
+//            for (Member member : resultList) {
+//                System.out.println("member = " + member);
+//            }
+
+/*
+            // Criteria 사용 준비
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Member> query = cb.createQuery(Member.class);
+            Root<Member> m = query.from(Member.class);
+            CriteriaQuery<Member> cq = query.select(m).where(cb.equal(m.get("username"), "kim"));
+            List<Member> resultList1 = em.createQuery(cq)
+                    .getResultList();
+*/
+
 
 
             tx.commit();
